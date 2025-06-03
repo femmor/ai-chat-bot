@@ -1,8 +1,10 @@
-import ChatBotStart from "./components/ChatBotStart"
+import { ChatBotStart } from "./components"
 
 const App = () => {
   return (
-    <ChatBotStart />
+    <div className="container">
+      <ChatBotStart />
+    </div>
   )
 }
 export default App
