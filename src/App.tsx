@@ -1,9 +1,10 @@
-import { ChatBotStart } from "./components"
+import { ChatBotApp, ChatBotStart } from "./components"
 
 const App = () => {
   return (
     <div className="container">
-      <ChatBotStart />
+      {/* <ChatBotStart /> */}
+      <ChatBotApp />
     </div>
   )
 }
