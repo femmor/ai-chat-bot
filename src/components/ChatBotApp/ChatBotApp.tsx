@@ -1,7 +1,11 @@
 import { CircleX, Edit3Icon, MoveLeft, Send, Smile } from "lucide-react"
 import "./ChatBotApp.css"
 
-const ChatBotApp = () => {
+type ChatBotAppProps = {
+    onGoBack: () => void;
+}
+
+const ChatBotApp = ({ onGoBack }: ChatBotAppProps) => {
     return (
         <div className="chat-app">
             <div className="chat-list">
@@ -26,7 +30,7 @@ const ChatBotApp = () => {
             <div className="chat-window">
                 <div className="chat-title">
                     <h3>Chat with AI</h3>
-                    <MoveLeft className="arrow" />
+                    <MoveLeft className="arrow" onClick={onGoBack} />
                 </div>
                 <div className="chat">
                     <div className="prompt">Hi!, How are you?

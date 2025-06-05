@@ -1,9 +1,13 @@
 import "./ChatBotStart.css";
 
-const ChatBotStart = () => {
+type ChatBotStartProps = {
+    onStartChat: () => void;
+}
+
+const ChatBotStart = ({ onStartChat }: ChatBotStartProps) => {
     return (
         <div className="start-page">
-            <button className="start-page-btn">
+            <button className="start-page-btn" onClick={onStartChat}>
                 Chat AI
             </button>
         </div>
