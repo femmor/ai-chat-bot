@@ -9,7 +9,7 @@ const ChatBotApp = () => {
                     <h2>Chat List</h2>
                     <Edit3Icon className="new-chat" size={30} />
                 </div>
-                <div className="chat-list-item">
+                <div className="chat-list-item active">
                     <h4>Chat 06/01/2025 12:59:42 PM</h4>
                     <CircleX className="delete-chat" />
                 </div>
@@ -33,7 +33,7 @@ const ChatBotApp = () => {
                         <span>12:59:51 PM</span>
                     </div>
                     <div className="response">Hello, I'm just a computer program without feelings but I am here and ready to help! How can I assist you today?
-                        <span>12:59:512PM</span>
+                        <span>12:59:51 PM</span>
                     </div>
                     <div className="typing">Typing...</div>
                 </div>
