@@ -63,6 +63,15 @@ const ChatBotApp = ({ onGoBack, chats, setChats, activeChat, setActiveChat, onNe
         setActiveChat(chatId);
     }
 
+    const handleDeleteChat = (chatId: string) => {
+        const updatedChats = chats.filter(chat => chat.id !== chatId);
+        setChats(updatedChats);
+        if (activeChat === chatId) {
+            const newActiveChat = updatedChats.length > 0 ? updatedChats[0].id : null;
+            setActiveChat(newActiveChat || '');
+        }
+    }
+
     // Handles the messages for the active chat
     useEffect(() => {
         const currentChat = chats.find(chat => chat.id === activeChat);
@@ -79,7 +88,10 @@ const ChatBotApp = ({ onGoBack, chats, setChats, activeChat, setActiveChat, onNe
                 {chats.map((chat) => (
                     <div key={chat.id} className={`chat-list-item ${chat.id === activeChat ? "active" : ""}`} onClick={() => handleSelectChat(chat.id)}>
                         <h4>{chat.displayId}</h4>
-                        <CircleX className="delete-chat" />
+                        <CircleX className="delete-chat" onClick={(e) => {
+                            e.stopPropagation(); // Prevents the click from propagating to the chat selection
+                            handleDeleteChat(chat.id);
+                        }} />
                     </div>
                 ))}
             </div>
