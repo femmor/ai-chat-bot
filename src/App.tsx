@@ -21,11 +21,11 @@ const App = () => {
     setIsChatting(false)
   }
 
-  const createNewChat = () => {
+  const createNewChat = (initialMessage: string = "") => {
     const newChat: Chat = {
       id: uuidv4(),
       displayId: `Chat ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
-      messages: [] as Message[],
+      messages: initialMessage ? [{ type: "prompt", text: initialMessage, timestamp: new Date().toLocaleTimeString() }] as Message[] : [],
     }
 
     const updatedChats = [newChat, ...chats]

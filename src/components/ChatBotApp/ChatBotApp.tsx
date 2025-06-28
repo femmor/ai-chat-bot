@@ -15,7 +15,7 @@ type ChatBotAppProps = {
     setChats: (chats: Chat[]) => void;
     activeChat: string | null;
     setActiveChat: (activeChat: string) => void;
-    onNewChat: () => void;
+    onNewChat: (inputValue: string) => void;
 }
 
 const ChatBotApp = ({ onGoBack, chats, setChats, activeChat, setActiveChat, onNewChat }: ChatBotAppProps) => {
@@ -35,18 +35,23 @@ const ChatBotApp = ({ onGoBack, chats, setChats, activeChat, setActiveChat, onNe
             timestamp: new Date().toLocaleTimeString(),
         }
 
-        const updatedMessages = [...messages, newMessage]
-        setMessages(updatedMessages)
-        setInputValue("");
+        if (!activeChat) {
+            onNewChat(inputValue);
+            setInputValue("");
+        } else {
+            const updatedMessages = [...messages, newMessage]
+            setMessages(updatedMessages)
+            setInputValue("");
 
-        const updatedChats = chats.map((chat) => {
-            if (chat.id === activeChat) {
-                return { ...chat, messages: updatedMessages };
-            }
-            return chat;
-        })
+            const updatedChats = chats.map((chat) => {
+                if (chat.id === activeChat) {
+                    return { ...chat, messages: updatedMessages };
+                }
+                return chat;
+            })
 
-        setChats(updatedChats)
+            setChats(updatedChats)
+        }
     }
 
     const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -83,7 +88,7 @@ const ChatBotApp = ({ onGoBack, chats, setChats, activeChat, setActiveChat, onNe
             <div className="chat-list">
                 <div className="chat-list-header">
                     <h2>Chat List</h2>
-                    <Edit3Icon className="new-chat" size={30} onClick={onNewChat} />
+                    <Edit3Icon className="new-chat" size={30} onClick={() => onNewChat(inputValue)} />
                 </div>
                 {chats.map((chat) => (
                     <div key={chat.id} className={`chat-list-item ${chat.id === activeChat ? "active" : ""}`} onClick={() => handleSelectChat(chat.id)}>
