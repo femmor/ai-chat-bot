@@ -5,6 +5,7 @@ export type Message = {
 }
 
 export type Chat = {
-    id: string
+    id: string,
+    displayId: string,
     messages: Message[]
 }

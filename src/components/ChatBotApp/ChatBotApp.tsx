@@ -1,15 +1,24 @@
 import { CircleX, Edit3Icon, MoveLeft, Send, Smile } from "lucide-react"
 import "./ChatBotApp.css"
 import type { Chat, Message } from "../../types";
-import { useState, type ChangeEvent, type FormEvent, type KeyboardEvent } from "react";
+import {
+    useEffect,
+    useState,
+    type ChangeEvent,
+    type FormEvent,
+    type KeyboardEvent
+} from "react";
 
 type ChatBotAppProps = {
     onGoBack: () => void;
     chats: Chat[];
     setChats: (chats: Chat[]) => void;
+    activeChat: string | null;
+    setActiveChat: (activeChat: string) => void;
+    onNewChat: () => void;
 }
 
-const ChatBotApp = ({ onGoBack, chats, setChats }: ChatBotAppProps) => {
+const ChatBotApp = ({ onGoBack, chats, setChats, activeChat, setActiveChat, onNewChat }: ChatBotAppProps) => {
     const [inputValue, setInputValue] = useState<string>("");
     const [messages, setMessages] = useState<Message[]>(chats[0]?.messages || []);
 
@@ -30,9 +39,8 @@ const ChatBotApp = ({ onGoBack, chats, setChats }: ChatBotAppProps) => {
         setMessages(updatedMessages)
         setInputValue("");
 
-        const updatedChats = chats.map((chat, index) => {
-            if (index === 0) {
-                // Assuming we are updating the first chat
+        const updatedChats = chats.map((chat) => {
+            if (chat.id === activeChat) {
                 return { ...chat, messages: updatedMessages };
             }
             return chat;
@@ -51,16 +59,26 @@ const ChatBotApp = ({ onGoBack, chats, setChats }: ChatBotAppProps) => {
         }
     }
 
+    const handleSelectChat = (chatId: string) => {
+        setActiveChat(chatId);
+    }
+
+    // Handles the messages for the active chat
+    useEffect(() => {
+        const currentChat = chats.find(chat => chat.id === activeChat);
+        setMessages(currentChat ? currentChat.messages : []);
+    }, [activeChat, chats])
+
     return (
         <div className="chat-app">
             <div className="chat-list">
                 <div className="chat-list-header">
                     <h2>Chat List</h2>
-                    <Edit3Icon className="new-chat" size={30} />
+                    <Edit3Icon className="new-chat" size={30} onClick={onNewChat} />
                 </div>
-                {chats.map((chat, index) => (
-                    <div key={index} className={`chat-list-item ${index === 0 ? "active" : ""}`}>
-                        <h4>{chat.id}</h4>
+                {chats.map((chat) => (
+                    <div key={chat.id} className={`chat-list-item ${chat.id === activeChat ? "active" : ""}`} onClick={() => handleSelectChat(chat.id)}>
+                        <h4>{chat.displayId}</h4>
                         <CircleX className="delete-chat" />
                     </div>
                 ))}
