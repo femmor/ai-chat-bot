@@ -26,7 +26,7 @@ const ChatBotApp = ({ onGoBack, chats, setChats, activeChat, setActiveChat, onNe
         setInputValue(e.target.value);
     };
 
-    const handleSendMessage = () => {
+    const handleSendMessage = async () => {
         if (inputValue.trim() === "") return;
 
         const newMessage = {
@@ -51,6 +51,45 @@ const ChatBotApp = ({ onGoBack, chats, setChats, activeChat, setActiveChat, onNe
             })
 
             setChats(updatedChats)
+
+            // Connect to OPEN AI API to get a response
+            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${import.meta.env.VITE_OPEN_AI_API_KEY}`
+                },
+                body: JSON.stringify({
+                    model: "gpt-4",
+                    messages: [
+                        { role: "user", content: inputValue },
+                    ],
+                    max_tokens: 500,
+                })
+            });
+
+            const data = await response.json();
+            const chatResponse = data.choices[0].message.content.trim();
+
+            const newResponseMessage: Message = {
+                type: "response",
+                text: chatResponse,
+                timestamp: new Date().toLocaleTimeString(),
+            }
+
+            const updatedMessagesWithResponse = [...updatedMessages, newResponseMessage];
+
+            setMessages(updatedMessagesWithResponse)
+
+            const updatedChatsWithResponse = chats.map((chat) => {
+                if (chat.id === activeChat) {
+                    return { ...chat, messages: updatedMessagesWithResponse };
+                }
+                return chat;
+            })
+
+            setChats(updatedChatsWithResponse);
+            setActiveChat(activeChat); // Ensure the active chat is set correctly
         }
     }
 
